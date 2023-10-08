@@ -18,12 +18,12 @@ namespace MultipleSSH.Helpers
                 throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName");
             }
 
-            if (!Enum.IsDefined(typeof(Wpf.Ui.Appearance.ThemeType), value))
+            if (!Enum.IsDefined(typeof(Wpf.Ui.Appearance.ApplicationTheme), value))
             {
                 throw new ArgumentException("ExceptionEnumToBooleanConverterValueMustBeAnEnum");
             }
 
-            var enumValue = Enum.Parse(typeof(Wpf.Ui.Appearance.ThemeType), enumString);
+            var enumValue = Enum.Parse(typeof(Wpf.Ui.Appearance.ApplicationTheme), enumString);
 
             return enumValue.Equals(value);
         }
@@ -35,7 +35,7 @@ namespace MultipleSSH.Helpers
                 throw new ArgumentException("ExceptionEnumToBooleanConverterParameterMustBeAnEnumName");
             }
 
-            return Enum.Parse(typeof(Wpf.Ui.Appearance.ThemeType), enumString);
+            return Enum.Parse(typeof(Wpf.Ui.Appearance.ApplicationTheme), enumString);
         }
     }
 
@@ -66,6 +66,30 @@ namespace MultipleSSH.Helpers
             }
 
             return Enum.Parse(typeof(WindowBackdropType), enumString);
+        }
+    }
+    class EmunToIntConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (int)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return (int)value;
+        }
+    }
+    class MultiValueToObject : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            return values.Clone();
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

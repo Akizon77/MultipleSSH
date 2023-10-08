@@ -6,12 +6,15 @@
 using Microsoft.Win32;
 using MultipleSSH.Models;
 using MultipleSSH.Resources;
+using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net.Http;
+using Wpf.Ui.Controls;
 
 namespace MultipleSSH.ViewModels.Pages
 {
-    public partial class DashboardViewModel : ObservableObject
+    public partial class DashboardViewModel : ObservableObject, INavigationAware
     {
         [ObservableProperty]
         private string fastHost = String.Empty;
@@ -29,9 +32,13 @@ namespace MultipleSSH.ViewModels.Pages
         private string fastKeyPath = String.Empty;
 
         [ObservableProperty]
-        private
-        //0 密码；1 私钥
-        int fastVerigyMethod = 0;
+        private int fastVerigyMethod = 0; //0 密码 1 私钥
+
+        [ObservableProperty]
+        private string hitokoto = string.Empty;
+
+        [ObservableProperty]
+        private string welcomeText = String.Empty;
 
         [ObservableProperty]
         private ObservableCollection<Models.SshHost> _hosts = new(AppSettings.Instance.Hosts);
@@ -98,5 +105,77 @@ namespace MultipleSSH.ViewModels.Pages
             Clipboard.SetText(host.Password);
             Process.Start(psi);
         }
+
+        [RelayCommand]
+        private async Task OnRefreshHitokoto()
+        {
+            var hitokoto = await GetHitokotoAsync();
+            Hitokoto = hitokoto;
+            async Task<string> GetHitokotoAsync()
+            {
+                var httpclient = new HttpClient();
+                var request = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri("https://v1.hitokoto.cn/"),
+                };
+                var resopnse = await httpclient.SendAsync(request);
+                var jsonRaw = await resopnse.Content.ReadAsStringAsync();
+                return JObject.Parse(jsonRaw)["hitokoto"].ToString();
+            }
+        }
+
+        [RelayCommand]
+        private void OnDelete(object obj)
+        {
+            var delItem = obj as SshHost;
+            Hosts.Remove(delItem);
+            AppSettings.Instance.Hosts = Hosts.ToList();
+            AppSettings.Save();
+        }
+
+        [RelayCommand]
+        private void OnAddHost(object obj)
+        {
+            var host = obj as SshHost;
+            Hosts.Add(host);
+            AppSettings.Instance.Hosts = Hosts.ToList();
+            AppSettings.Save();
+        }
+
+        [RelayCommand]
+        private void OnAddHostFull(object obj)
+        {
+            var o = obj as object[];
+            var sshHost = new SshHost()
+            {
+                FriendlyName = (string)o[0],
+                Host = (string)o[1],
+                Port = (string)o[2],
+                Username = (string)o[3],
+                LoginMethod = (LoginMethod)o[4],
+                Password = (string)o[5],
+                PrivateKey = (string)o[6]
+            };
+            Hosts.Add(sshHost);
+            AppSettings.Instance.Hosts = Hosts.ToList();
+            AppSettings.Save();
+        }
+
+        public void OnNavigatedTo()
+        {
+            WelcomeText = double.Parse(DateTime.Now.ToString("HH")) switch
+            {
+                < 6d => "要好好休息呀！身体是最重要的哦",
+                < 11d => "早上好，又是美好的一天呢！",
+                < 14d => "中午好，记得午休哦！",
+                < 18d => "今天会有晚霞嘛？",
+                < 22d => "晚上去吃什么呢？",
+                < 24d => "夜深了，又在忙什么工作呢？",
+                _ => "辛苦啦！",
+            };
+        }
+
+        public void OnNavigatedFrom() { }
     }
 }

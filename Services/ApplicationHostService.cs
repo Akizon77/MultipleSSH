@@ -53,7 +53,7 @@ namespace MultipleSSH.Services
                 var navigationWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 navigationWindow.Loaded += OnNavigationWindowLoaded;
                 navigationWindow.Show();
-                Wpf.Ui.Appearance.Theme.Apply(AppSettings.Instance.Theme, AppSettings.Instance.Backdrop);
+                Wpf.Ui.Appearance.ApplicationThemeManager.Apply(AppSettings.Instance.Theme, AppSettings.Instance.Backdrop);
             }
         }
 

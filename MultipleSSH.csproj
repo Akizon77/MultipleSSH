@@ -17,7 +17,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="WPF-UI" Version="3.0.0-preview.4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1 " />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1 " />
   </ItemGroup>
@@ -31,6 +30,9 @@
   <ItemGroup>
     <Reference Include="ConPtyTermEmulatorLib">
       <HintPath>C:\Users\hytf2\Desktop\ConPty\ConPtyTermEmulatorLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Wpf.Ui">
+      <HintPath>..\Release\WPF_UI\Wpf.Ui.dll</HintPath>
     </Reference>
   </ItemGroup>
 

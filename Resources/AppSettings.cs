@@ -12,7 +12,7 @@ namespace MultipleSSH.Resources
         public static AppSettings GetSettings() => Instance;
 
         //Light Dark
-        public Wpf.Ui.Appearance.ThemeType Theme;
+        public Wpf.Ui.Appearance.ApplicationTheme Theme;
 
         //Acrylic Mica
         public WindowBackdropType Backdrop;
@@ -27,7 +27,7 @@ namespace MultipleSSH.Resources
             {
                 jsonStr = File.ReadAllText(path);
                 JObject json = JObject.Parse(jsonStr);
-                Theme = json["Theme"].ToObject<Wpf.Ui.Appearance.ThemeType>();
+                Theme = json["Theme"].ToObject<Wpf.Ui.Appearance.ApplicationTheme>();
                 Backdrop = json["Backdrop"].ToObject<WindowBackdropType>();
                 try
                 {
@@ -41,7 +41,7 @@ namespace MultipleSSH.Resources
             else
             {
                 Backdrop = WindowBackdropType.Mica;
-                Theme = Wpf.Ui.Appearance.ThemeType.Light;
+                Theme = Wpf.Ui.Appearance.ApplicationTheme.Light;
                 Hosts = new List<SshHost>();
                 Save();
             }
@@ -64,5 +64,6 @@ namespace MultipleSSH.Resources
                 return false;
             }
         }
+
     }
 }

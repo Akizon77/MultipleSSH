@@ -29,14 +29,24 @@
             <StackPanel />
         </ui:ClientAreaBorder>
 
-        <t:BasicTerminalControl
+        <Border
             Grid.Row="1"
+            MinWidth="100"
+            MinHeight="100"
             Margin="0,0,0,80"
-            FontFamilyWhenSettingTheme="Consolas"
-            InputCapture="TabKey,DirectionKeys"
-            IsTabStop="False"
-            LogConPTYOutput="True"
-            StartupCommandLine="cmd"
-            Win32InputMode="True" />
+            Padding="8"
+            CornerRadius="6"
+            VerticalAlignment="Stretch"
+            Background="Black"
+            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}">
+            <t:BasicTerminalControl
+                FontFamilyWhenSettingTheme="Consolas"
+                InputCapture="TabKey,DirectionKeys"
+                IsTabStop="False"
+                LogConPTYOutput="True"
+                StartupCommandLine="cmd"
+                Win32InputMode="True" />
+        </Border>
+
     </Grid>
 </Page>

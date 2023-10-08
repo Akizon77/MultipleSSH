@@ -16,7 +16,10 @@ namespace MultipleSSH.ViewModels.Pages
         private string _appVersion = String.Empty;
 
         [ObservableProperty]
-        private Wpf.Ui.Appearance.ThemeType _currentTheme = Wpf.Ui.Appearance.ThemeType.Unknown;
+        private Wpf.Ui.Appearance.ApplicationTheme _currentTheme = Wpf.Ui
+            .Appearance
+            .ApplicationTheme
+            .Unknown;
 
         [ObservableProperty]
         private WindowBackdropType _currentBackdrop = WindowBackdropType.None;
@@ -27,12 +30,11 @@ namespace MultipleSSH.ViewModels.Pages
                 InitializeViewModel();
         }
 
-        public void OnNavigatedFrom()
-        { }
+        public void OnNavigatedFrom() { }
 
         private void InitializeViewModel()
         {
-            CurrentTheme = Wpf.Ui.Appearance.Theme.GetAppTheme();
+            CurrentTheme = AppSettings.Instance.Theme;
             CurrentBackdrop = AppSettings.Instance.Backdrop;
             AppVersion = $"MultipleSSH - {GetAssemblyVersion()}";
 
@@ -51,17 +53,17 @@ namespace MultipleSSH.ViewModels.Pages
             switch (parameter)
             {
                 case "theme_light":
-                    if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Light)
+                    if (CurrentTheme == Wpf.Ui.Appearance.ApplicationTheme.Light)
                         break;
-                    CurrentTheme = Wpf.Ui.Appearance.ThemeType.Light;
-                    Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
+                    CurrentTheme = Wpf.Ui.Appearance.ApplicationTheme.Light;
+                    Wpf.Ui.Appearance.ApplicationThemeManager.Apply(CurrentTheme, CurrentBackdrop);
                     break;
 
                 default:
-                    if (CurrentTheme == Wpf.Ui.Appearance.ThemeType.Dark)
+                    if (CurrentTheme == Wpf.Ui.Appearance.ApplicationTheme.Dark)
                         break;
-                    CurrentTheme = Wpf.Ui.Appearance.ThemeType.Dark;
-                    Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
+                    CurrentTheme = Wpf.Ui.Appearance.ApplicationTheme.Dark;
+                    Wpf.Ui.Appearance.ApplicationThemeManager.Apply(CurrentTheme, CurrentBackdrop);
                     break;
             }
             AppSettings.Instance.Theme = CurrentTheme;
@@ -77,28 +79,26 @@ namespace MultipleSSH.ViewModels.Pages
                     if (CurrentBackdrop == WindowBackdropType.Acrylic)
                         break;
                     CurrentBackdrop = WindowBackdropType.Acrylic;
-                    Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
                     break;
 
                 case "mica":
                     if (CurrentBackdrop == WindowBackdropType.Mica)
                         break;
                     CurrentBackdrop = WindowBackdropType.Mica;
-                    Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
+
                     break;
 
                 case "tabbed":
                     if (CurrentBackdrop == WindowBackdropType.Tabbed)
                         break;
                     CurrentBackdrop = WindowBackdropType.Tabbed;
-                    Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
                     break;
 
                 default:
                     CurrentBackdrop = WindowBackdropType.Mica;
-                    Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
                     break;
             }
+            Wpf.Ui.Appearance.ApplicationThemeManager.Apply(CurrentTheme, CurrentBackdrop);
             AppSettings.Instance.Backdrop = CurrentBackdrop;
             AppSettings.Save();
         }

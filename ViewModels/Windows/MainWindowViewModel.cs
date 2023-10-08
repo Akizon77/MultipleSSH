@@ -5,13 +5,16 @@
 
 using MultipleSSH.Resources;
 using System.Collections.ObjectModel;
-using Wpf.Ui.Common;
 using Wpf.Ui.Controls;
 
 namespace MultipleSSH.ViewModels.Windows
 {
     public partial class MainWindowViewModel : ObservableObject
     {
+        public static MainWindowViewModel Instance { get; private set; }
+
+        public double frameHeight;
+
         [ObservableProperty]
         private string _applicationTitle = "MultipleSSH".Translate();
 
@@ -56,6 +59,7 @@ namespace MultipleSSH.ViewModels.Windows
         [RelayCommand]
         private void OnStartApplication()
         {
+            Instance = this;
             var settings = AppSettings.Instance;
         }
     }

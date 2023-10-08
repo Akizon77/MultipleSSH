@@ -17,128 +17,478 @@
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
     ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    ScrollViewer.CanContentScroll="False"
     mc:Ignorable="d">
     <Page.Resources>
         <helper:BindProxy x:Key="Page" Data="{Binding ElementName=dashboardPage}" />
+        <helper:EmunToIntConverter x:Key="EmunToIntConverter" />
+        <helper:MultiValueToObject x:Key="MultiValueToObject" />
     </Page.Resources>
-    <Grid>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Source={StaticResource Page}, Path=Data.ViewModel.RefreshHitokotoCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid Name="pageRootGrid" VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions />
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
+        <!--  欢迎 一言  -->
         <Grid Grid.Row="0">
             <TextBlock
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 FontSize="40"
                 FontWeight="DemiBold"
-                Text="辛苦啦！" />
+                Text="{Binding ViewModel.WelcomeText}" />
             <Label
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Content="成长是悄无声息的!"
+                Content="{Binding ViewModel.Hitokoto}"
                 FontFamily="Microsoft YaHei UI"
                 FontWeight="Regular" />
         </Grid>
-
-        <Grid Grid.Row="1">
+        <!--  左侧 添加Dock 列表  -->
+        <Grid Name="boardGrid" Grid.Row="1">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel>
-                    <DockPanel Margin="0,8,80,0">
-                        <ui:Button Margin="8,0" Appearance="Success">
+                <Grid Name="listViewContainerGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <!--  添加 搜索  -->
+                    <DockPanel Grid.Row="0" Margin="0,8,40,0">
+                        <ui:Flyout
+                            Name="addHostFlyout"
+                            Margin="0,0,0,0"
+                            Placement="Bottom">
+                            <Grid MinWidth="220">
+                                <StackPanel>
+                                    <DockPanel>
+                                        <TextBlock VerticalAlignment="Center" Text="显示名称" />
+                                        <ui:TextBox
+                                            Name="flyFriendlyName"
+                                            Margin="10,0,0,0"
+                                            PlaceholderText="My Server" />
+                                    </DockPanel>
+                                    <DockPanel Margin="0,10,0,0">
+                                        <TextBlock VerticalAlignment="Center" Text="主机" />
+                                        <ui:TextBox
+                                            Name="flyHost"
+                                            Margin="10,0,0,0"
+                                            PlaceholderText="example.com" />
+                                    </DockPanel>
+                                    <DockPanel>
+                                        <DockPanel Margin="0,10,0,0">
+                                            <TextBlock VerticalAlignment="Center" Text="端口" />
+                                            <ui:NumberBox
+                                                Name="flyPort"
+                                                Margin="10,0,0,0"
+                                                PlaceholderText="22" />
+                                        </DockPanel>
+                                        <DockPanel Margin="10,10,0,0">
+                                            <TextBlock VerticalAlignment="Center" Text="验证方式" />
+                                            <!--  输入密码和选择密钥  -->
+                                            <ComboBox
+                                                Name="flyLoginMethod"
+                                                Margin="10,0,0,0"
+                                                SelectedIndex="0">
+                                                <i:Interaction.Triggers>
+                                                    <i:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=SelectedIndex}" Value="0">
+                                                        <i:ChangePropertyAction
+                                                            PropertyName="Visibility"
+                                                            TargetName="flyoutAddHostPwdBox"
+                                                            Value="Visible" />
+                                                        <i:ChangePropertyAction
+                                                            PropertyName="Visibility"
+                                                            TargetName="flyoutAddHostKeyBox"
+                                                            Value="Collapsed" />
+                                                    </i:DataTrigger>
+                                                    <i:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=SelectedIndex}" Value="1">
+                                                        <i:ChangePropertyAction
+                                                            PropertyName="Visibility"
+                                                            TargetName="flyoutAddHostPwdBox"
+                                                            Value="Collapsed" />
+                                                        <i:ChangePropertyAction
+                                                            PropertyName="Visibility"
+                                                            TargetName="flyoutAddHostKeyBox"
+                                                            Value="Visible" />
+                                                    </i:DataTrigger>
+                                                </i:Interaction.Triggers>
+                                                <ComboBoxItem Content="密码" />
+                                                <ComboBoxItem Content="私钥" />
+                                            </ComboBox>
+                                        </DockPanel>
+                                    </DockPanel>
+                                    <DockPanel Margin="0,10,0,0">
+                                        <TextBlock VerticalAlignment="Center" Text="账户" />
+                                        <ui:TextBox
+                                            Name="flyUsername"
+                                            Margin="10,0,0,0"
+                                            PlaceholderText="example.com" />
+                                    </DockPanel>
+                                    <DockPanel
+                                        Name="flyoutAddHostPwdBox"
+                                        Margin="0,10,0,0"
+                                        Visibility="Visible">
+                                        <TextBlock VerticalAlignment="Center" Text="密码" />
+                                        <ui:PasswordBox
+                                            Name="flyPwd"
+                                            Margin="10,0,0,0"
+                                            PlaceholderText="Password" />
+                                    </DockPanel>
+                                    <DockPanel
+                                        Name="flyoutAddHostKeyBox"
+                                        Margin="0,10,0,0"
+                                        Visibility="Collapsed">
+                                        <TextBlock VerticalAlignment="Center" Text="私钥" />
+                                        <Grid>
+                                            <ui:TextBox
+                                                Name="flyKey"
+                                                Margin="10,0,40,0"
+                                                HorizontalAlignment="Stretch"
+                                                PlaceholderText="C:\key" />
+                                            <Button HorizontalAlignment="Right" Content="..." />
+                                        </Grid>
+                                    </DockPanel>
+                                    <DockPanel Margin="0,10,0,0">
+                                        <ui:Button HorizontalAlignment="Left" Content="取消">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="IsOpen"
+                                                        TargetName="addHostFlyout"
+                                                        Value="False" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyFriendlyName"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyHost"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyPort"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="SelectedIndex"
+                                                        TargetName="flyLoginMethod"
+                                                        Value="0" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyUsername"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Password"
+                                                        TargetName="flyPwd"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyKey"
+                                                        Value="" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ui:Button>
+
+                                        <ui:Button
+                                            HorizontalAlignment="Right"
+                                            Appearance="Success"
+                                            Command="{Binding Source={StaticResource Page}, Path=Data.ViewModel.AddHostFullCommand}"
+                                            Content="添加">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="IsOpen"
+                                                        TargetName="addHostFlyout"
+                                                        Value="False" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyFriendlyName"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyHost"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyPort"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="SelectedIndex"
+                                                        TargetName="flyLoginMethod"
+                                                        Value="0" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyUsername"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Password"
+                                                        TargetName="flyPwd"
+                                                        Value="" />
+                                                    <i:ChangePropertyAction
+                                                        PropertyName="Text"
+                                                        TargetName="flyKey"
+                                                        Value="" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <ui:Button.CommandParameter>
+                                                <MultiBinding Converter="{StaticResource MultiValueToObject}">
+                                                    <Binding ElementName="flyFriendlyName" Path="Text" />
+                                                    <Binding ElementName="flyHost" Path="Text" />
+                                                    <Binding ElementName="flyPort" Path="Text" />
+                                                    <Binding ElementName="flyUsername" Path="Text" />
+                                                    <Binding ElementName="flyLoginMethod" Path="SelectedIndex" />
+                                                    <Binding ElementName="flyPwd" Path="Password" />
+                                                    <Binding ElementName="flyKey" Path="Text" />
+                                                </MultiBinding>
+
+                                            </ui:Button.CommandParameter>
+                                        </ui:Button>
+                                    </DockPanel>
+                                </StackPanel>
+                            </Grid>
+                        </ui:Flyout>
+                        <ui:Button Margin="-8,0,8,0" Appearance="Success">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Click">
+                                    <i:ChangePropertyAction
+                                        PropertyName="IsOpen"
+                                        TargetName="addHostFlyout"
+                                        Value="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <DockPanel>
                                 <ui:SymbolIcon Symbol="Add24" />
                                 <TextBlock Margin="8,0" Text="添加" />
                             </DockPanel>
                         </ui:Button>
+
                         <ui:AutoSuggestBox PlaceholderText="搜索..." />
                     </DockPanel>
-                    <ItemsControl ItemsSource="{Binding ViewModel.Hosts, Mode=TwoWay}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border
-                                    Margin="4,16,80,0"
-                                    Padding="8"
-                                    Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
-                                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
-                                    BorderThickness="2"
-                                    CornerRadius="4">
-                                    <Grid>
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock
-                                                Name="connectTo"
-                                                FontSize="22"
-                                                FontWeight="SemiBold">
+                    <!--  滚动 & 列表展示  -->
+                    <ScrollViewer
+                        Grid.Row="1"
+                        Margin="0,16,40,0"
+                        VerticalScrollBarVisibility="Visible">
+                        <ItemsControl ItemsSource="{Binding ViewModel.Hosts, Mode=TwoWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border
+                                        Width="Auto"
+                                        Margin="4,16,0,0"
+                                        Padding="8"
+                                        Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                                        BorderThickness="2"
+                                        CornerRadius="4">
+                                        <Grid>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock
+                                                    Name="connectTo"
+                                                    FontSize="22"
+                                                    FontWeight="SemiBold">
 
-                                                <Run Name="fname" Text="{Binding FriendlyName}" />
-                                            </TextBlock>
+                                                    <Run Name="fname" Text="{Binding FriendlyName}" />
+                                                </TextBlock>
 
-                                            <TextBlock Margin="0,4" FontSize="14">
-                                                <Run Text="验证方式:" />
-                                                <Run Text="{Binding LoginMethod}" />
-                                                <Run Text="  端口:" />
-                                                <Run Text="{Binding Port}" />
-                                            </TextBlock>
-                                            <TextBlock Margin="0,4" FontSize="14">
-                                                <Run Text="主机:" />
-                                                <Run Text="{Binding Host}" />
-                                            </TextBlock>
-                                            <!--  右下角删除和连接  -->
-                                            <DockPanel>
-                                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                                                    <ui:Button
-                                                        Margin="8,0"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Bottom"
-                                                        Appearance="Info"
-                                                        Command="{Binding Source={StaticResource Page}, Path=Data.ViewModel.ConnectCommand}"
-                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
-                                                        <ui:SymbolIcon Symbol="Open24" />
-                                                    </ui:Button>
-                                                    <ui:Button
-                                                        Margin="0"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Bottom"
-                                                        Appearance="Info"
-                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}"
-                                                        Visibility="Collapsed">
-                                                        <ui:SymbolIcon Symbol="Remote16" />
-                                                    </ui:Button>
-                                                    <ui:Button
-                                                        Margin="8,0,0,0"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Bottom"
-                                                        Appearance="Caution"
-                                                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
-                                                        <!--  删除  -->
-                                                        <i:Interaction.Triggers>
-                                                            <i:EventTrigger EventName="Click">
-                                                                <i:RemoveItemInListBoxAction />
-                                                            </i:EventTrigger>
-                                                        </i:Interaction.Triggers>
-                                                        <ui:SymbolIcon Symbol="Delete24" />
-                                                    </ui:Button>
-                                                </StackPanel>
-                                            </DockPanel>
-                                        </StackPanel>
-                                        <ui:Button
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
-                                            <ui:SymbolIcon Symbol="Edit24" />
-                                        </ui:Button>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                                                <TextBlock Margin="0,4" FontSize="14">
+                                                    <Run Text="验证方式:" />
+                                                    <Run Text="{Binding LoginMethod}" />
+                                                    <Run Text="  端口:" />
+                                                    <Run Text="{Binding Port}" />
+                                                </TextBlock>
+                                                <TextBlock Margin="0,4" FontSize="14">
+                                                    <Run Text="主机:" />
+                                                    <Run Text="{Binding Host}" />
+                                                </TextBlock>
+                                                <!--  右下角删除和连接  -->
+                                                <DockPanel>
+                                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                                        <ui:Button
+                                                            Margin="8,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Bottom"
+                                                            Appearance="Info"
+                                                            Command="{Binding Source={StaticResource Page}, Path=Data.ViewModel.ConnectCommand}"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
+                                                            <ui:SymbolIcon Symbol="Open24" />
+                                                        </ui:Button>
+                                                        <ui:Button
+                                                            Margin="0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Bottom"
+                                                            Appearance="Info"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}"
+                                                            Visibility="Collapsed">
+                                                            <ui:SymbolIcon Symbol="Remote16" />
+                                                        </ui:Button>
+                                                        <ui:Button
+                                                            Margin="8,0,0,0"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Bottom"
+                                                            Appearance="Caution"
+                                                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
+                                                            <!--  删除  -->
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="Click">
+                                                                    <i:RemoveItemInListBoxAction />
+                                                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource Page}, Path=Data.ViewModel.DeleteCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ui:Button}, Path=DataContext}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>
+                                                            <ui:SymbolIcon Symbol="Delete24" />
+                                                        </ui:Button>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                            </StackPanel>
+                                            <ui:Button
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Top"
+                                                CommandParameter="{Binding RelativeSource={RelativeSource Mode=Self}, Path=DataContext}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:ChangePropertyAction
+                                                            PropertyName="IsOpen"
+                                                            TargetName="editHostFlyout"
+                                                            Value="True" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <Grid>
+                                                    <ui:SymbolIcon Symbol="Edit24" />
+                                                    <ui:Flyout
+                                                        Name="editHostFlyout"
+                                                        Margin="0,0,0,0"
+                                                        Placement="Bottom">
+                                                        <Grid MinWidth="220">
+                                                            <StackPanel>
+                                                                <DockPanel>
+                                                                    <TextBlock VerticalAlignment="Center" Text="显示名称" />
+                                                                    <ui:TextBox
+                                                                        Name="flyFriendlyName"
+                                                                        Margin="10,0,0,0"
+                                                                        PlaceholderText="My Server"
+                                                                        Text="{Binding FriendlyName, Mode=OneTime}" />
+                                                                </DockPanel>
+                                                                <DockPanel Margin="0,10,0,0">
+                                                                    <TextBlock VerticalAlignment="Center" Text="主机" />
+                                                                    <ui:TextBox
+                                                                        Name="flyHost"
+                                                                        Margin="10,0,0,0"
+                                                                        PlaceholderText="example.com"
+                                                                        Text="{Binding Host, Mode=OneTime}" />
+                                                                </DockPanel>
+                                                                <DockPanel>
+                                                                    <DockPanel Margin="0,10,0,0">
+                                                                        <TextBlock VerticalAlignment="Center" Text="端口" />
+                                                                        <ui:NumberBox
+                                                                            Name="flyPort"
+                                                                            Margin="10,0,0,0"
+                                                                            PlaceholderText="22"
+                                                                            Text="{Binding Port, Mode=OneTime}" />
+                                                                    </DockPanel>
+                                                                    <DockPanel Margin="10,10,0,0">
+                                                                        <TextBlock VerticalAlignment="Center" Text="验证方式" />
+                                                                        <ComboBox
+                                                                            Name="flyLoginMethod"
+                                                                            Margin="10,0,0,0"
+                                                                            SelectedIndex="{Binding LoginMethod, Mode=OneTime, Converter={StaticResource EmunToIntConverter}}">
+                                                                            <i:Interaction.Triggers>
+                                                                                <i:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=SelectedIndex}" Value="0">
+                                                                                    <i:ChangePropertyAction
+                                                                                        PropertyName="Visibility"
+                                                                                        TargetName="flyoutAddHostPwdBox"
+                                                                                        Value="Visible" />
+                                                                                    <i:ChangePropertyAction
+                                                                                        PropertyName="Visibility"
+                                                                                        TargetName="flyoutAddHostKeyBox"
+                                                                                        Value="Collapsed" />
+                                                                                </i:DataTrigger>
+                                                                                <i:DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=SelectedIndex}" Value="1">
+                                                                                    <i:ChangePropertyAction
+                                                                                        PropertyName="Visibility"
+                                                                                        TargetName="flyoutAddHostPwdBox"
+                                                                                        Value="Collapsed" />
+                                                                                    <i:ChangePropertyAction
+                                                                                        PropertyName="Visibility"
+                                                                                        TargetName="flyoutAddHostKeyBox"
+                                                                                        Value="Visible" />
+                                                                                </i:DataTrigger>
+                                                                            </i:Interaction.Triggers>
+                                                                            <ComboBoxItem Content="密码" />
+                                                                            <ComboBoxItem Content="私钥" />
+                                                                        </ComboBox>
+                                                                    </DockPanel>
+                                                                </DockPanel>
+                                                                <DockPanel Margin="0,10,0,0">
+                                                                    <TextBlock VerticalAlignment="Center" Text="账户" />
+                                                                    <ui:TextBox
+                                                                        Name="flyUsername"
+                                                                        Margin="10,0,0,0"
+                                                                        PlaceholderText="example.com"
+                                                                        Text="{Binding Username}" />
+                                                                </DockPanel>
+                                                                <DockPanel
+                                                                    Name="flyoutAddHostPwdBox"
+                                                                    Margin="0,10,0,0"
+                                                                    Visibility="Visible">
+                                                                    <TextBlock VerticalAlignment="Center" Text="密码" />
+                                                                    <ui:PasswordBox
+                                                                        Name="flyPwd"
+                                                                        Margin="10,0,0,0"
+                                                                        Password="{Binding Password, Mode=OneTime}"
+                                                                        PlaceholderText="Password" />
+                                                                </DockPanel>
+                                                                <DockPanel
+                                                                    Name="flyoutAddHostKeyBox"
+                                                                    Margin="0,10,0,0"
+                                                                    Visibility="Collapsed">
+                                                                    <TextBlock VerticalAlignment="Center" Text="私钥" />
+                                                                    <Grid>
+                                                                        <ui:TextBox
+                                                                            Name="flyKey"
+                                                                            Margin="10,0,40,0"
+                                                                            HorizontalAlignment="Stretch"
+                                                                            PlaceholderText="C:\key"
+                                                                            Text="{Binding PrivateKey, Mode=OneTime}" />
+                                                                        <Button HorizontalAlignment="Right" Content="..." />
+                                                                    </Grid>
+                                                                </DockPanel>
+                                                                <DockPanel Margin="0,10,0,0">
+                                                                    <!--<ui:Button HorizontalAlignment="Left" Content="取消">
+                                                                        <i:Interaction.Triggers>
+                                                                            <i:EventTrigger EventName="Click">
+                                                                                <i:ChangePropertyAction
+                                                                                    PropertyName="IsOpen"
+                                                                                    TargetName="editHostFlyout"
+                                                                                    Value="False" />
+                                                                            </i:EventTrigger>
+                                                                        </i:Interaction.Triggers>
+                                                                    </ui:Button>-->
+
+                                                                    <ui:Button
+                                                                        HorizontalAlignment="Right"
+                                                                        Appearance="Success"
+                                                                        Content="确定" />
+                                                                </DockPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </ui:Flyout>
+                                                </Grid>
+
+                                            </ui:Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
 
                 <!--#region 快速连接-->
                 <Border
@@ -149,9 +499,6 @@
                     BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="2"
                     CornerRadius="4">
-                    <i:Interaction.Behaviors>
-                        <i:MouseDragElementBehavior />
-                    </i:Interaction.Behaviors>
                     <StackPanel Margin="8" Orientation="Vertical">
                         <TextBlock
                             Margin="4"
@@ -284,7 +631,7 @@
                 Padding="8"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Background="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
                 BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                 BorderThickness="2"
                 CornerRadius="4"

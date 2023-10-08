@@ -5,6 +5,8 @@
 
 using MultipleSSH.Resources;
 using MultipleSSH.ViewModels.Windows;
+using Wpf.Ui;
+using Wpf.Ui.Controls;
 using Wpf.Ui.Controls;
 
 namespace MultipleSSH.Views.Windows
@@ -22,7 +24,7 @@ namespace MultipleSSH.Views.Windows
         )
         {
             new AppSettings();
-            Wpf.Ui.Appearance.Watcher.Watch(this);
+            //Wpf.Ui.Appearance.App.Watch(this);
 
             ViewModel = viewModel;
             DataContext = this;
