@@ -38,6 +38,7 @@ namespace MultipleSSH.Helpers
             return Enum.Parse(typeof(Wpf.Ui.Appearance.ThemeType), enumString);
         }
     }
+
     internal class BackDropToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

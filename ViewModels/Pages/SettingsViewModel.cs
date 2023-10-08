@@ -17,6 +17,7 @@ namespace MultipleSSH.ViewModels.Pages
 
         [ObservableProperty]
         private Wpf.Ui.Appearance.ThemeType _currentTheme = Wpf.Ui.Appearance.ThemeType.Unknown;
+
         [ObservableProperty]
         private WindowBackdropType _currentBackdrop = WindowBackdropType.None;
 
@@ -26,7 +27,8 @@ namespace MultipleSSH.ViewModels.Pages
                 InitializeViewModel();
         }
 
-        public void OnNavigatedFrom() { }
+        public void OnNavigatedFrom()
+        { }
 
         private void InitializeViewModel()
         {
@@ -65,6 +67,7 @@ namespace MultipleSSH.ViewModels.Pages
             AppSettings.Instance.Theme = CurrentTheme;
             AppSettings.Save();
         }
+
         [RelayCommand]
         private void OnChangeBackdrop(string param)
         {
@@ -76,18 +79,21 @@ namespace MultipleSSH.ViewModels.Pages
                     CurrentBackdrop = WindowBackdropType.Acrylic;
                     Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
                     break;
+
                 case "mica":
                     if (CurrentBackdrop == WindowBackdropType.Mica)
                         break;
                     CurrentBackdrop = WindowBackdropType.Mica;
                     Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
                     break;
+
                 case "tabbed":
                     if (CurrentBackdrop == WindowBackdropType.Tabbed)
                         break;
                     CurrentBackdrop = WindowBackdropType.Tabbed;
                     Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);
                     break;
+
                 default:
                     CurrentBackdrop = WindowBackdropType.Mica;
                     Wpf.Ui.Appearance.Theme.Apply(CurrentTheme, CurrentBackdrop);

@@ -1,24 +1,22 @@
-﻿using Microsoft.Extensions.Hosting;
-using MultipleSSH.Models;
+﻿using MultipleSSH.Models;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wpf.Ui.Controls;
 
 namespace MultipleSSH.Resources
 {
-    public  class AppSettings
+    public class AppSettings
     {
         public static AppSettings Instance;
+
         public static AppSettings GetSettings() => Instance;
+
         //Light Dark
         public Wpf.Ui.Appearance.ThemeType Theme;
+
         //Acrylic Mica
         public WindowBackdropType Backdrop;
+
         public List<SshHost> Hosts;
 
         public AppSettings()
@@ -37,10 +35,8 @@ namespace MultipleSSH.Resources
                 }
                 catch (Exception)
                 {
-
                     Hosts = new List<SshHost>();
                 }
-                
             }
             else
             {
@@ -51,8 +47,6 @@ namespace MultipleSSH.Resources
             }
             Instance = this;
         }
-
-
 
         //保存
         public static bool Save()
@@ -70,6 +64,5 @@ namespace MultipleSSH.Resources
                 return false;
             }
         }
-
     }
 }

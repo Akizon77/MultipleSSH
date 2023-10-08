@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MultipleSSH.Models
+﻿namespace MultipleSSH.Models
 {
     public class SshHost
     {
@@ -16,6 +10,7 @@ namespace MultipleSSH.Models
         public string? PrivateKey { get; set; }
         public LoginMethod LoginMethod { get; set; }
     }
+
     public enum LoginMethod
     {
         Password,

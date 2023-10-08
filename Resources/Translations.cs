@@ -8,6 +8,7 @@ namespace MultipleSSH.Resources
     public partial class Translations
     {
     }
+
     public static class Extensions
     {
         public static string Translate(this string str)

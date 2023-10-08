@@ -18,7 +18,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
-        <helpers:BackDropToBooleanConverter x:Key="BackDropToBooleanConverter"/>
+        <helpers:BackDropToBooleanConverter x:Key="BackDropToBooleanConverter" />
     </Page.Resources>
 
     <StackPanel>
@@ -41,25 +41,28 @@
             Content="深色"
             GroupName="themeSelect"
             IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
-        <TextBlock Text="窗口材质" Margin="0,12,0,0"/>
-        <RadioButton Content="Mica"
-                     CommandParameter="miac"
-                     Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
-                     GroupName="window_Material"
-                     IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Mica,Mode=OneWay}"
-                     Margin="0,12,0,0"/>
-        <RadioButton Content="Acrylic"
-                     CommandParameter="acrylic"
-                     Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
-                     IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Acrylic,Mode=OneWay}"
-                     GroupName="window_Material"
-                     Margin="0,8,0,0"/>
-        <RadioButton Content="Tabbed"
-                     CommandParameter="tabbed"
-                     Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
-                     IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Tabbed,Mode=OneWay}"
-                     GroupName="window_Material"
-                     Margin="0,8,0,0"/>
+        <TextBlock Margin="0,12,0,0" Text="窗口材质" />
+        <RadioButton
+            Margin="0,12,0,0"
+            Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
+            CommandParameter="miac"
+            Content="Mica"
+            GroupName="window_Material"
+            IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Mica, Mode=OneWay}" />
+        <RadioButton
+            Margin="0,8,0,0"
+            Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
+            CommandParameter="acrylic"
+            Content="Acrylic"
+            GroupName="window_Material"
+            IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Acrylic, Mode=OneWay}" />
+        <RadioButton
+            Margin="0,8,0,0"
+            Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
+            CommandParameter="tabbed"
+            Content="Tabbed"
+            GroupName="window_Material"
+            IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Tabbed, Mode=OneWay}" />
         <TextBlock
             Margin="0,24,0,0"
             FontSize="20"

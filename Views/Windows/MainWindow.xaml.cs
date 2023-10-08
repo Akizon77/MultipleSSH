@@ -35,7 +35,5 @@ namespace MultipleSSH.Views.Windows
 
             NavigationView.SetServiceProvider(serviceProvider);
         }
-
-
     }
 }

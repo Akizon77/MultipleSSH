@@ -14,6 +14,7 @@ namespace MultipleSSH.ViewModels.Windows
     {
         [ObservableProperty]
         private string _applicationTitle = "MultipleSSH".Translate();
+
         //导航栏
         [ObservableProperty]
         private ObservableCollection<object> _menuItems = new()
@@ -51,6 +52,7 @@ namespace MultipleSSH.ViewModels.Windows
         {
             new MenuItem { Header = "Home", Tag = "tray_home" }
         };
+
         [RelayCommand]
         private void OnStartApplication()
         {

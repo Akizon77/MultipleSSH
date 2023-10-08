@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:MultipleSSH.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:MultipleSSH.Models"
-    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:t="clr-namespace:ConPtyTermEmulatorLib;assembly=ConPtyTermEmulatorLib"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="DataPage"
     d:DataContext="{d:DesignInstance local:DataPage,
                                      IsDesignTimeCreatable=False}"
@@ -22,26 +22,21 @@
 
     <Grid Margin="16">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="0" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ui:ClientAreaBorder
-            
-            
-            Grid.Row="0">
-            <StackPanel>
-                
-            </StackPanel>
+        <ui:ClientAreaBorder Grid.Row="0">
+            <StackPanel />
         </ui:ClientAreaBorder>
 
-        <t:BasicTerminalControl 
-            Margin="0,0,0,80"
+        <t:BasicTerminalControl
             Grid.Row="1"
-            IsTabStop="False"
-            Win32InputMode="True"
+            Margin="0,0,0,80"
             FontFamilyWhenSettingTheme="Consolas"
-            LogConPTYOutput="True"
             InputCapture="TabKey,DirectionKeys"
-            StartupCommandLine="cmd"/>
+            IsTabStop="False"
+            LogConPTYOutput="True"
+            StartupCommandLine="cmd"
+            Win32InputMode="True" />
     </Grid>
 </Page>
