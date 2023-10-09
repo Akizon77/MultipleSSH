@@ -99,7 +99,7 @@ namespace MultipleSSH.ViewModels.Pages
                     host.PrivateKey = tempKeyFile;
                 }
                 psi.Arguments =
-                    $"/c ssh {host.Username}@{host.Host} -p {host.Port} -i {host.PrivateKey} & pause";
+                    $"/c ssh {host.Username}@{host.Host} -p {host.Port} -i \"{host.PrivateKey}\" & pause";
                 Process.Start(psi);
                 return;
             }
@@ -123,19 +123,26 @@ namespace MultipleSSH.ViewModels.Pages
         [RelayCommand]
         private async Task OnRefreshHitokoto()
         {
-            var hitokoto = await GetHitokotoAsync();
-            Hitokoto = hitokoto;
-            async Task<string> GetHitokotoAsync()
+            try
             {
-                var httpclient = new HttpClient();
-                var request = new HttpRequestMessage()
+                var hitokoto = await GetHitokotoAsync();
+                Hitokoto = hitokoto;
+                async Task<string> GetHitokotoAsync()
                 {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri("https://v1.hitokoto.cn/"),
-                };
-                var resopnse = await httpclient.SendAsync(request);
-                var jsonRaw = await resopnse.Content.ReadAsStringAsync();
-                return JObject.Parse(jsonRaw)["hitokoto"].ToString();
+                    var httpclient = new HttpClient();
+                    var request = new HttpRequestMessage()
+                    {
+                        Method = HttpMethod.Get,
+                        RequestUri = new Uri("https://v1.hitokoto.cn/"),
+                    };
+                    var resopnse = await httpclient.SendAsync(request);
+                    var jsonRaw = await resopnse.Content.ReadAsStringAsync();
+                    return JObject.Parse(jsonRaw)["hitokoto"].ToString();
+                }
+            }
+            catch
+            {
+                Hitokoto = "成长是触不及防的！";
             }
         }
 
@@ -162,9 +169,9 @@ namespace MultipleSSH.ViewModels.Pages
             {
                 FriendlyName = $"快速添加 - {DateTime.Now.ToString("yyyy-MM-dd_HH-mm")}",
                 Host = FastHost,
-                Port = FastPort,
+                Port = FastPort ?? "22",
                 LoginMethod = (LoginMethod)FastVerigyMethod,
-                Username = FastUsername,
+                Username = FastUsername ?? "root",
                 Password = FastPwd,
                 PrivateKey = FastKeyPath
             };
@@ -180,8 +187,8 @@ namespace MultipleSSH.ViewModels.Pages
             {
                 FriendlyName = (string)o[0],
                 Host = (string)o[1],
-                Port = (string)o[2],
-                Username = (string)o[3],
+                Port = (string)o[2] ?? "22",
+                Username = (string)o[3] ?? "root",
                 LoginMethod = (LoginMethod)o[4],
                 Password = (string)o[5],
                 PrivateKey = (string)o[6]
@@ -198,7 +205,7 @@ namespace MultipleSSH.ViewModels.Pages
         }
 
         [RelayCommand]
-        void OnSelecetFlyoutKeyPath() 
+        void OnSelecetFlyoutKeyPath()
         {
             OpenFileDialog fileDialog = new();
             fileDialog.ShowDialog();
