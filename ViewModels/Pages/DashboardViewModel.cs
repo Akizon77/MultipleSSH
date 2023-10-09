@@ -3,12 +3,14 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
 using MultipleSSH.Models;
 using MultipleSSH.Resources;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Net.Http;
 using Wpf.Ui.Controls;
 
@@ -39,6 +41,9 @@ namespace MultipleSSH.ViewModels.Pages
 
         [ObservableProperty]
         private string welcomeText = String.Empty;
+
+        [ObservableProperty]
+        string flyoutKeyPath = String.Empty;
 
         [ObservableProperty]
         private ObservableCollection<Models.SshHost> _hosts = new(AppSettings.Instance.Hosts);
@@ -84,6 +89,15 @@ namespace MultipleSSH.ViewModels.Pages
             psi.FileName = "cmd.exe";
             if (host.LoginMethod == LoginMethod.PrivateKey)
             {
+                if (host.PrivateKey.Contains("-----"))
+                {
+                    var ac = System.IO.Path.GetTempPath();
+                    Random random = new Random();
+                    var attach = random.Next(100000000, 999999999);
+                    var tempKeyFile = Path.Combine(ac, DateTime.Now.ToString("HHmmss-") + attach);
+                    File.WriteAllText(tempKeyFile, host.PrivateKey);
+                    host.PrivateKey = tempKeyFile;
+                }
                 psi.Arguments =
                     $"/c ssh {host.Username}@{host.Host} -p {host.Port} -i {host.PrivateKey} & pause";
                 Process.Start(psi);
@@ -130,17 +144,32 @@ namespace MultipleSSH.ViewModels.Pages
         {
             var delItem = obj as SshHost;
             Hosts.Remove(delItem);
-            AppSettings.Instance.Hosts = Hosts.ToList();
-            AppSettings.Save();
+            OnSaveConfig();
         }
 
         [RelayCommand]
         private void OnAddHost(object obj)
         {
             var host = obj as SshHost;
-            Hosts.Add(host);
-            AppSettings.Instance.Hosts = Hosts.ToList();
-            AppSettings.Save();
+            Hosts.Insert(0, host);
+            OnSaveConfig();
+        }
+
+        [RelayCommand]
+        void OnAddHostFast()
+        {
+            var host = new SshHost()
+            {
+                FriendlyName = $"快速添加 - {DateTime.Now.ToString("yyyy-MM-dd_HH-mm")}",
+                Host = FastHost,
+                Port = FastPort,
+                LoginMethod = (LoginMethod)FastVerigyMethod,
+                Username = FastUsername,
+                Password = FastPwd,
+                PrivateKey = FastKeyPath
+            };
+            Hosts.Insert(0, host);
+            OnSaveConfig();
         }
 
         [RelayCommand]
@@ -157,9 +186,25 @@ namespace MultipleSSH.ViewModels.Pages
                 Password = (string)o[5],
                 PrivateKey = (string)o[6]
             };
-            Hosts.Add(sshHost);
+            Hosts.Insert(0, sshHost);
+            OnSaveConfig();
+        }
+
+        [RelayCommand]
+        void OnSaveConfig()
+        {
             AppSettings.Instance.Hosts = Hosts.ToList();
             AppSettings.Save();
+        }
+
+        [RelayCommand]
+        void OnSelecetFlyoutKeyPath() 
+        {
+            OpenFileDialog fileDialog = new();
+            fileDialog.ShowDialog();
+            if (String.IsNullOrEmpty(fileDialog.FileName))
+                return;
+            FlyoutKeyPath = fileDialog.FileName;
         }
 
         public void OnNavigatedTo()

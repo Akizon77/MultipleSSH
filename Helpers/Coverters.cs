@@ -3,6 +3,7 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using MultipleSSH.Models;
 using System.Globalization;
 using System.Windows.Data;
 using Wpf.Ui.Controls;
@@ -77,7 +78,7 @@ namespace MultipleSSH.Helpers
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return (int)value;
+            return (LoginMethod)value;
         }
     }
     class MultiValueToObject : IMultiValueConverter
