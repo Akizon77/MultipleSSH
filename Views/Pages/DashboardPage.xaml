@@ -286,7 +286,7 @@
                             </DockPanel>
                         </ui:Button>
 
-                        <ui:AutoSuggestBox PlaceholderText="搜索..." />
+                        <ui:AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" PlaceholderText="搜索..." />
                     </DockPanel>
                     <!--  滚动 & 列表展示  -->
                     <ScrollViewer

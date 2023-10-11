@@ -46,7 +46,7 @@ namespace MultipleSSH.ViewModels.Pages
         string flyoutKeyPath = String.Empty;
 
         [ObservableProperty]
-        private ObservableCollection<Models.SshHost> _hosts = new(AppSettings.Instance.Hosts);
+        private List<Models.SshHost> _hosts = AppSettings.Instance.Hosts;
 
         [RelayCommand]
         private async Task OnFastConnect()
