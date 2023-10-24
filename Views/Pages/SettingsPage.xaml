@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:MultipleSSH.Helpers"
     xmlns:local="clr-namespace:MultipleSSH.Views.Pages"
+    xmlns:ct="clr-namespace:MultipleSSH.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="SettingsPage"
@@ -20,54 +21,85 @@
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
         <helpers:BackDropToBooleanConverter x:Key="BackDropToBooleanConverter" />
     </Page.Resources>
-
-    <StackPanel>
-        <TextBlock
-            FontSize="20"
-            FontWeight="Medium"
-            Text="个性化" />
-        <TextBlock Margin="0,12,0,0" Text="颜色" />
-        <RadioButton
-            Margin="0,12,0,0"
-            Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
-            CommandParameter="theme_light"
-            Content="浅色"
-            GroupName="themeSelect"
-            IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
-        <RadioButton
-            Margin="0,8,0,0"
-            Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
-            CommandParameter="theme_dark"
-            Content="深色"
-            GroupName="themeSelect"
-            IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
-        <TextBlock Margin="0,12,0,0" Text="窗口材质" />
-        <RadioButton
-            Margin="0,12,0,0"
-            Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
-            CommandParameter="miac"
-            Content="Mica"
-            GroupName="window_Material"
-            IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Mica, Mode=OneWay}" />
-        <RadioButton
-            Margin="0,8,0,0"
-            Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
-            CommandParameter="acrylic"
-            Content="Acrylic"
-            GroupName="window_Material"
-            IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Acrylic, Mode=OneWay}" />
-        <RadioButton
-            Margin="0,8,0,0"
-            Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
-            CommandParameter="tabbed"
-            Content="Tabbed"
-            GroupName="window_Material"
-            IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Tabbed, Mode=OneWay}" />
-        <TextBlock
-            Margin="0,24,0,0"
-            FontSize="20"
-            FontWeight="Medium"
-            Text="About MultipleSSH" />
-        <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
-    </StackPanel>
+    <Grid>
+        <Grid >
+            <StackPanel>
+                <TextBlock Text="设置" FontSize="32"/>
+                <TextBlock Margin="0,16,0,4" FontSize="16" Text="个性化"/>
+                <ct:SettingsCard Margin="0,4" Content="深浅色">
+                    <ct:SettingsCard.Header>
+                        <ui:SymbolIcon Symbol="Color24"/>
+                    </ct:SettingsCard.Header>
+                    <ct:SettingsCard.Footer>
+                        <ComboBox x:Name="ui_ThemeCombobox" SelectionChanged="ui_ThemeCombobox_SelectionChanged">
+                            <ComboBoxItem Content="浅色"/>
+                            <ComboBoxItem Content="深色"/>
+                        </ComboBox>
+                    </ct:SettingsCard.Footer>
+                </ct:SettingsCard>
+                <ct:SettingsCard Margin="0,4" Content="窗口材质">
+                    <ct:SettingsCard.Header>
+                        <ui:SymbolIcon Symbol="BorderBottom20"/>
+                    </ct:SettingsCard.Header>
+                    <ct:SettingsCard.Footer>
+                        <ComboBox x:Name="ui_BackdropCombobox" SelectionChanged="ui_BackdropCombobox_SelectionChanged">
+                            <ComboBoxItem Content="Mica"/>
+                            <ComboBoxItem Content="Acrylic"/>
+                            <ComboBoxItem Content="Tabbed"/>
+                        </ComboBox>
+                    </ct:SettingsCard.Footer>
+                </ct:SettingsCard>
+            </StackPanel>
+            
+        </Grid>
+        <StackPanel Visibility="Collapsed">
+            <TextBlock
+                FontSize="20"
+                FontWeight="Medium"
+                Text="个性化" />
+            <TextBlock Margin="0,12,0,0" Text="颜色" />
+            <RadioButton
+                Margin="0,12,0,0"
+                Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
+                CommandParameter="theme_light"
+                Content="浅色"
+                GroupName="themeSelect"
+                IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
+            <RadioButton
+                Margin="0,8,0,0"
+                Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
+                CommandParameter="theme_dark"
+                Content="深色"
+                GroupName="themeSelect"
+                IsChecked="{Binding ViewModel.CurrentTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+            <TextBlock Margin="0,12,0,0" Text="窗口材质" />
+            <RadioButton
+                Margin="0,12,0,0"
+                Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
+                CommandParameter="miac"
+                Content="Mica"
+                GroupName="window_Material"
+                IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Mica, Mode=OneWay}" />
+            <RadioButton
+                Margin="0,8,0,0"
+                Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
+                CommandParameter="acrylic"
+                Content="Acrylic"
+                GroupName="window_Material"
+                IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Acrylic, Mode=OneWay}" />
+            <RadioButton
+                Margin="0,8,0,0"
+                Command="{Binding ViewModel.ChangeBackdropCommand, Mode=OneWay}"
+                CommandParameter="tabbed"
+                Content="Tabbed"
+                GroupName="window_Material"
+                IsChecked="{Binding ViewModel.CurrentBackdrop, Converter={StaticResource BackDropToBooleanConverter}, ConverterParameter=Tabbed, Mode=OneWay}" />
+            <TextBlock
+                Margin="0,24,0,0"
+                FontSize="20"
+                FontWeight="Medium"
+                Text="About MultipleSSH" />
+            <TextBlock Margin="0,12,0,0" Text="{Binding ViewModel.AppVersion, Mode=OneWay}" />
+        </StackPanel>
+    </Grid>
 </Page>

@@ -14,6 +14,8 @@ namespace MultipleSSH.Resources
         //Light Dark
         public Wpf.Ui.Appearance.ApplicationTheme Theme;
 
+        public Language Lang;
+
         //Acrylic Mica
         public WindowBackdropType Backdrop;
 
@@ -41,6 +43,7 @@ namespace MultipleSSH.Resources
             else
             {
                 Backdrop = WindowBackdropType.Mica;
+                Lang = Language.简体中文;
                 Theme = Wpf.Ui.Appearance.ApplicationTheme.Light;
                 Hosts = new List<SshHost>();
                 Save();
