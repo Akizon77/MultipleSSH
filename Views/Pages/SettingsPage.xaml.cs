@@ -3,6 +3,7 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using MultipleSSH.Models;
 using MultipleSSH.Resources;
 using MultipleSSH.ViewModels.Pages;
 using System.Windows.Controls;
@@ -13,6 +14,10 @@ namespace MultipleSSH.Views.Pages
     public partial class SettingsPage : INavigableView<SettingsViewModel>
     {
         public SettingsViewModel ViewModel { get; }
+        public I18n i18N
+        {
+            get { return I18n.Instance; }
+        }
 
         public SettingsPage(SettingsViewModel viewModel)
         {
@@ -31,6 +36,7 @@ namespace MultipleSSH.Views.Pages
                 WindowBackdropType.Acrylic => 1,
                 WindowBackdropType.Tabbed => 2,
             };
+            ui_Combobox_SelectLanguage.SelectedIndex = (int)AppSettings.Instance.Lang;
         }
 
         private void ui_ThemeCombobox_SelectionChanged(
@@ -68,6 +74,24 @@ namespace MultipleSSH.Views.Pages
                     ViewModel.ChangeBackdropCommand.Execute("tabbed");
                     break;
             }
+        }
+
+        private void ui_Button_Debug_GenerateLangFile_Click(object sender, RoutedEventArgs e)
+        {
+            I18n.GenerateLanguageFile();
+        }
+
+        private void ui_Combobox_SelectLanguage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var cb = sender as ComboBox;
+            var lang = (Language)cb.SelectedIndex;
+            I18n.SwitchTo(lang);
+        }
+
+
+        private void ui_Button_Debug_Creak_Click(object sender, RoutedEventArgs e)
+        {
+            throw new Exception("手动抛出异常");
         }
     }
 }

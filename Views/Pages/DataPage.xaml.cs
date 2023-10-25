@@ -3,6 +3,7 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using MultipleSSH.Models;
 using MultipleSSH.ViewModels.Pages;
 using Wpf.Ui.Controls;
 
@@ -11,6 +12,10 @@ namespace MultipleSSH.Views.Pages
     public partial class DataPage : INavigableView<DataViewModel>
     {
         public DataViewModel ViewModel { get; }
+        public I18n i18N
+        {
+            get { return I18n.Instance; }
+        }
 
         public DataPage(DataViewModel viewModel)
         {

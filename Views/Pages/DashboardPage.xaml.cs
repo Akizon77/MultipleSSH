@@ -14,6 +14,10 @@ namespace MultipleSSH.Views.Pages
     public partial class DashboardPage : INavigableView<DashboardViewModel>
     {
         public DashboardViewModel ViewModel { get; }
+        public I18n i18N
+        {
+            get { return I18n.Instance; }
+        }
 
         public DashboardPage(DashboardViewModel viewModel)
         {

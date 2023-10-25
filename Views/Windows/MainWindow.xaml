@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:MultipleSSH.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
+    Title="{Binding i18N.AppTitle, Mode=OneWay}"
     Width="1280"
     Height="720"
     d:DataContext="{d:DesignInstance local:MainWindow,
@@ -66,7 +66,7 @@
 
         <ui:TitleBar
             x:Name="TitleBar"
-            Title="{Binding ViewModel.ApplicationTitle}"
+            Title="{Binding i18N.AppTitle}"
             Grid.Row="0"
             CloseWindowByDoubleClickOnIcon="False">
             <ui:TitleBar.Icon>

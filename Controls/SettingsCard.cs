@@ -48,6 +48,18 @@ namespace MultipleSSH.Controls
     {
 
 
+
+        public string SubText
+        {
+            get { return (string)GetValue(SubTextProperty); }
+            set { SetValue(SubTextProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SubText.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SubTextProperty =
+            DependencyProperty.Register("SubText", typeof(string), typeof(SettingsCard), new PropertyMetadata(""));
+
+
         public object Header
         {
             get { return (object)GetValue(HeaderProperty); }

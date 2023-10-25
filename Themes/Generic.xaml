@@ -22,11 +22,11 @@
                             </Grid.ColumnDefinitions>
                             <ContentPresenter
                                 Grid.Column="0"
+                                Margin="0,0,8,0"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Margin="0,0,8,0"
-                                TextElement.FontSize="24"
-                                Content="{TemplateBinding Header}" />
+                                Content="{TemplateBinding Header}"
+                                TextElement.FontSize="24" />
                             <ContentPresenter
                                 Grid.Column="1"
                                 VerticalAlignment="Center"

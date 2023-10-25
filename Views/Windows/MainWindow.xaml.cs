@@ -3,6 +3,7 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using MultipleSSH.Models;
 using MultipleSSH.Resources;
 using MultipleSSH.ViewModels.Windows;
 using Wpf.Ui;
@@ -13,7 +14,12 @@ namespace MultipleSSH.Views.Windows
 {
     public partial class MainWindow
     {
+        public I18n i18N
+        {
+            get { return I18n.Instance; }
+        }
         public MainWindowViewModel ViewModel { get; }
+        
 
         public MainWindow(
             MainWindowViewModel viewModel,
@@ -23,7 +29,7 @@ namespace MultipleSSH.Views.Windows
             IContentDialogService contentDialogService
         )
         {
-            new AppSettings();
+            
             //Wpf.Ui.Appearance.App.Watch(this);
 
             ViewModel = viewModel;

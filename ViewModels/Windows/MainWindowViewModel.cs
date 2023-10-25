@@ -3,6 +3,7 @@
 // Copyright (C) Leszek Pomianowski and WPF UI Contributors.
 // All Rights Reserved.
 
+using MultipleSSH.Models;
 using MultipleSSH.Resources;
 using System.Collections.ObjectModel;
 using Wpf.Ui.Controls;
@@ -15,8 +16,6 @@ namespace MultipleSSH.ViewModels.Windows
 
         public double frameHeight;
 
-        [ObservableProperty]
-        private string _applicationTitle = "MultipleSSH".Translate();
 
         //导航栏
         [ObservableProperty]
@@ -24,14 +23,14 @@ namespace MultipleSSH.ViewModels.Windows
         {
             new NavigationViewItem()
             {
-                Content = "主页".Translate(),
+                Content = I18n.Instance.NaviMenu_Home,
                 FontSize = 12,
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Home24 },
                 TargetPageType = typeof(Views.Pages.DashboardPage)
             },
             new NavigationViewItem()
             {
-                Content = "终端".Translate(),
+                Content = I18n.Instance.NaviMenu_Terminal,
                 FontSize = 12,
                 Icon = new SymbolIcon { Symbol = SymbolRegular.DataHistogram24 },
                 TargetPageType = typeof(Views.Pages.DataPage)
@@ -43,7 +42,7 @@ namespace MultipleSSH.ViewModels.Windows
         {
             new NavigationViewItem()
             {
-                Content = "设置".Translate(),
+                Content = I18n.Instance.NaviMenu_Settings,
                 FontSize = 12,
                 Icon = new SymbolIcon { Symbol = SymbolRegular.Settings24 },
                 TargetPageType = typeof(Views.Pages.SettingsPage)
@@ -60,7 +59,6 @@ namespace MultipleSSH.ViewModels.Windows
         private void OnStartApplication()
         {
             Instance = this;
-            var settings = AppSettings.Instance;
         }
     }
 }

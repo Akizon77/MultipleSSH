@@ -31,6 +31,7 @@ namespace MultipleSSH.Resources
                 JObject json = JObject.Parse(jsonStr);
                 Theme = json["Theme"].ToObject<Wpf.Ui.Appearance.ApplicationTheme>();
                 Backdrop = json["Backdrop"].ToObject<WindowBackdropType>();
+                Lang = json["Lang"].ToObject<Language>();
                 try
                 {
                     Hosts = json["Hosts"].ToObject<List<SshHost>>();

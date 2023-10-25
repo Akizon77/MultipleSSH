@@ -72,14 +72,14 @@
                             <Grid MinWidth="220" MaxWidth="400">
                                 <StackPanel>
                                     <DockPanel>
-                                        <TextBlock VerticalAlignment="Center" Text="显示名称" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_FriendlyName}" />
                                         <ui:TextBox
                                             Name="flyFriendlyName"
                                             Margin="10,0,0,0"
-                                            PlaceholderText="My Server" />
+                                            PlaceholderText="{Binding i18N.Model_SSHhost_FriendlyName}" />
                                     </DockPanel>
                                     <DockPanel Margin="0,10,0,0">
-                                        <TextBlock VerticalAlignment="Center" Text="主机" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_IP}" />
                                         <ui:TextBox
                                             Name="flyHost"
                                             Margin="10,0,0,0"
@@ -87,14 +87,14 @@
                                     </DockPanel>
                                     <DockPanel>
                                         <DockPanel Margin="0,10,0,0">
-                                            <TextBlock VerticalAlignment="Center" Text="端口" />
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_Port}" />
                                             <ui:NumberBox
                                                 Name="flyPort"
                                                 Margin="10,0,0,0"
                                                 PlaceholderText="22" />
                                         </DockPanel>
                                         <DockPanel Margin="10,10,0,0">
-                                            <TextBlock VerticalAlignment="Center" Text="验证方式" />
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_LoginMethod}" />
                                             <!--  输入密码和选择密钥  -->
                                             <ComboBox
                                                 Name="flyLoginMethod"
@@ -122,33 +122,33 @@
                                                             Value="Visible" />
                                                     </i:DataTrigger>
                                                 </i:Interaction.Triggers>
-                                                <ComboBoxItem Content="密码" />
-                                                <ComboBoxItem Content="私钥" />
+                                                <ComboBoxItem Content="{Binding i18N.Model_SSHhost_Password}" />
+                                                <ComboBoxItem Content="{Binding i18N.Model_SSHhost_PrivateKey}" />
                                             </ComboBox>
                                         </DockPanel>
                                     </DockPanel>
                                     <DockPanel Margin="0,10,0,0">
-                                        <TextBlock VerticalAlignment="Center" Text="账户" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_User}" />
                                         <ui:TextBox
                                             Name="flyUsername"
                                             Margin="10,0,0,0"
-                                            PlaceholderText="example.com" />
+                                            PlaceholderText="root" />
                                     </DockPanel>
                                     <DockPanel
                                         Name="flyoutAddHostPwdBox"
                                         Margin="0,10,0,0"
                                         Visibility="Visible">
-                                        <TextBlock VerticalAlignment="Center" Text="密码" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_Password}" />
                                         <ui:PasswordBox
                                             Name="flyPwd"
                                             Margin="10,0,0,0"
-                                            PlaceholderText="Password" />
+                                            PlaceholderText="{Binding i18N.Model_SSHhost_Password}" />
                                     </DockPanel>
                                     <DockPanel
                                         Name="flyoutAddHostKeyBox"
                                         Margin="0,10,0,0"
                                         Visibility="Collapsed">
-                                        <TextBlock VerticalAlignment="Center" Text="私钥" />
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding i18N.Model_SSHhost_PrivateKey}" />
                                         <Grid>
                                             <ui:TextBox
                                                 Name="flyKey"
@@ -163,7 +163,7 @@
                                         </Grid>
                                     </DockPanel>
                                     <DockPanel Margin="0,10,0,0">
-                                        <ui:Button HorizontalAlignment="Left" Content="取消">
+                                        <ui:Button HorizontalAlignment="Left" Content="{Binding i18N.Universe_Delete}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
                                                     <i:ChangePropertyAction
@@ -205,7 +205,7 @@
                                         <ui:Button
                                             HorizontalAlignment="Right"
                                             Appearance="Success"
-                                            Content="添加">
+                                            Content="{Binding i18N.Universe_Add}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Click">
                                                     <i:InvokeCommandAction Command="{Binding Source={StaticResource Page}, Path=Data.ViewModel.AddHostFullCommand}">
@@ -282,11 +282,11 @@
                             </i:Interaction.Triggers>
                             <DockPanel>
                                 <ui:SymbolIcon Symbol="Add24" />
-                                <TextBlock Margin="8,0" Text="添加" />
+                                <TextBlock Margin="8,0" Text="{Binding i18N.Universe_Add}" />
                             </DockPanel>
                         </ui:Button>
 
-                        <ui:AutoSuggestBox QuerySubmitted="AutoSuggestBox_QuerySubmitted" PlaceholderText="搜索..." />
+                        <ui:AutoSuggestBox PlaceholderText="{Binding i18N.Page_Main_SearchBoxPlaceholder}" QuerySubmitted="AutoSuggestBox_QuerySubmitted" />
                     </DockPanel>
                     <!--  滚动 & 列表展示  -->
                     <ScrollViewer
@@ -328,14 +328,14 @@
                                                     <TextBlock Style="{StaticResource titleText}" Text="{Binding FriendlyName}" />
                                                     <DockPanel>
                                                         <DockPanel>
-                                                            <TextBlock Text="主机 " />
+                                                            <TextBlock Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_Host}" />
                                                             <ui:TextBlock
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
                                                                 Text="{Binding Host, Mode=TwoWay}" />
                                                         </DockPanel>
                                                         <DockPanel Margin="8,0">
-                                                            <TextBlock Text="端口 " />
+                                                            <TextBlock Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_Port}" />
                                                             <ui:TextBlock
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
@@ -344,14 +344,14 @@
                                                     </DockPanel>
                                                     <DockPanel>
                                                         <DockPanel>
-                                                            <TextBlock Text="用户 " />
+                                                            <TextBlock Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_User}" />
                                                             <ui:TextBlock
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
                                                                 Text="{Binding Username}" />
                                                         </DockPanel>
                                                         <DockPanel>
-                                                            <TextBlock Margin="8,0,0,0" Text="验证方式 " />
+                                                            <TextBlock Margin="8,0,16,0" Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_LoginMethod}" />
                                                             <!--  对应ComboxBox  -->
                                                             <ui:TextBlock
                                                                 HorizontalAlignment="Left"
@@ -368,14 +368,14 @@
                                                     <ui:TextBox HorizontalAlignment="Left" Text="{Binding FriendlyName}" />
                                                     <DockPanel>
                                                         <DockPanel>
-                                                            <TextBlock Text="主机 " />
+                                                            <TextBlock Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_Host}" />
                                                             <ui:TextBox
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
                                                                 Text="{Binding Host, Mode=TwoWay}" />
                                                         </DockPanel>
                                                         <DockPanel Margin="8,0">
-                                                            <TextBlock Text="端口 " />
+                                                            <TextBlock Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_Port}" />
                                                             <ui:TextBox
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
@@ -385,14 +385,14 @@
                                                     </DockPanel>
                                                     <DockPanel>
                                                         <DockPanel>
-                                                            <TextBlock Text="用户 " />
+                                                            <TextBlock Text="{Binding Source={StaticResource Page}, Path=Data.i18N.Model_SSHhost_User}" />
                                                             <ui:TextBox
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Center"
                                                                 Text="{Binding Username}" />
                                                         </DockPanel>
                                                         <DockPanel>
-                                                            <TextBlock Margin="8,0,0,0" Text="验证方式 " />
+                                                            <TextBlock Margin="8,0,16,0" Text="{Binding Source={StaticResource Page},Path=Data.i18N.Model_SSHhost_LoginMethod}" />
                                                             <!--  对应ComboxBox  -->
                                                             <ComboBox
                                                                 HorizontalAlignment="Left"
@@ -427,7 +427,7 @@
                                                     </DockPanel>
                                                     <DockPanel Name="editPwdPanel">
                                                         <!--  仅编辑可见 密码和密钥选择  -->
-                                                        <TextBlock Text="密码" />
+                                                        <TextBlock Text="{Binding Source={StaticResource Page},Path=Data.i18N.Model_SSHhost_Password}" />
                                                         <ui:PasswordBox
                                                             MinWidth="120"
                                                             HorizontalAlignment="Left"
@@ -436,7 +436,7 @@
                                                     </DockPanel>
                                                     <DockPanel Name="editKeyPanel">
                                                         <!--  仅编辑可见 密码和密钥选择  -->
-                                                        <TextBlock Text="私钥" />
+                                                        <TextBlock Text="{Binding Source={StaticResource Page},Path=Data.i18N.Model_SSHhost_PrivateKey}" />
                                                         <ui:TextBox
                                                             Width="220"
                                                             MaxHeight="36"

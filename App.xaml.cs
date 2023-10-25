@@ -6,6 +6,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MultipleSSH.Models;
+using MultipleSSH.Resources;
 using MultipleSSH.Services;
 using MultipleSSH.ViewModels.Pages;
 using MultipleSSH.ViewModels.Windows;
@@ -63,7 +65,11 @@ namespace MultipleSSH
         /// Occurs when the application is loading.
         /// </summary>
         private void OnStartup(object sender, StartupEventArgs e)
+        
         {
+            new AppSettings();
+            new I18n();
+            Models.I18n.SwitchTo(AppSettings.Instance.Lang);
             _host.Start();
         }
 
@@ -82,7 +88,7 @@ namespace MultipleSSH
         /// </summary>
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+            MessageBox.Show(e.Exception.ToString());
         }
     }
 }
