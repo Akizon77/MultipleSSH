@@ -125,10 +125,13 @@ namespace MultipleSSH.ViewModels.Pages
         {
             try
             {
+                string myVar;
                 var hitokoto = await GetHitokotoAsync();
                 Hitokoto = hitokoto;
                 async Task<string> GetHitokotoAsync()
                 {
+                    myVar = "嵌套函数给父级的变量赋值"; 
+                    Task.Run(() => myVar = "233"); ;
                     var httpclient = new HttpClient();
                     var request = new HttpRequestMessage()
                     {
