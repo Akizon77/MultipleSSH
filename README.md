@@ -28,7 +28,7 @@ Fluent Design 非常有 Win 11 特色
 ### 急速添加
 主页醒目的添加按钮，Flyout弹出，添加服务器轻而易举
 
-![image](https://github.com/Akizon77/MultipleSSH/assets/64686663/f6b46b58-0092-4b24-888a-fa9868b43470)
+![GIF 2023-11-14 20-49-29](https://github.com/Akizon77/MultipleSSH/assets/64686663/02505704-e0d6-49da-864b-40690c057459)
 
 ### 服务器太多？可以搜索！
 
@@ -40,8 +40,9 @@ Fluent Design 非常有 Win 11 特色
 
 ![image](https://github.com/Akizon77/MultipleSSH/assets/64686663/f2ff81be-5d0a-476a-80e9-aaece1d90040)
 
-### 修改数据？仅需要单机！
+### 修改数据？仅需要单击！
 
 点击右上角修改按钮即可修改数据！
 
-![image](https://github.com/Akizon77/MultipleSSH/assets/64686663/53fdac2a-a991-476c-b02a-452afbfce562)
+![GIF 2023-11-14 20-47-32](https://github.com/Akizon77/MultipleSSH/assets/64686663/3e7c70a3-366b-4b3b-9ae8-4123942bda90)
+
